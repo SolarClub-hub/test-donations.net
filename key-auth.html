@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход по ключу</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f0ff 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .auth-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transform: translateY(30px);
+            opacity: 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .key-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(26,115,232,0.3);
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .key-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        h1 {
+            font-size: 22px;
+            color: #202124;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #5f6368;
+            font-size: 15px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            background: rgba(255,255,255,0.8);
+        }
+        
+        .input-field:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 4px rgba(26,115,232,0.1);
+            outline: none;
+        }
+        
+        .error-msg {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 8px;
+            text-align: left;
+            height: 20px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .error-msg.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            box-shadow: 0 4px 15px rgba(26,115,232,0.3);
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(26,115,232,0.4);
+        }
+        
+        .auth-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .get-key-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: transparent;
+            color: #1a73e8;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .get-key-btn:hover {
+            background: rgba(26,115,232,0.1);
+        }
+        
+        .get-key-btn svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            fill: #1a73e8;
+        }
+        
+        .shake {
+            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="key-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 3a4 4 0 0 0-4 4v3H6v11h12V10h-2V7a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v3h-4V7a2 2 0 0 1 2-2zm-2 9v2h4v-2h-4z"/>
+            </svg>
+        </div>
+        
+        <h1>Доступ по ключу</h1>
+        <p class="subtitle">Введите ваш персональный ключ</p>
+        
+        <div class="input-group">
+            <input type="text" class="input-field" id="keyInput" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
+            <div class="error-msg" id="errorMsg">Недействительный ключ</div>
+        </div>
+        
+        <button class="auth-btn" id="authBtn">Продолжить</button>
+        
+        <button class="get-key-btn" id="getKeyBtn">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 3a4 4 0 0 0-4 4v3H6v11h12V10h-2V7a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v3h-4V7a2 2 0 0 1 2-2zm-2 9v2h4v-2h-4z"/>
+            </svg>
+            Получить ключ
+        </button>
+    </div>
+
+    <script>
+        // Действительные ключи
+        const validKeys = [
+            "VIP-2023-CODE", 
+            "TEST-KEY-1234", 
+            "SECRET-5678",
+            "GOLD-2023-CODE",
+            "SILVER-5678", 
+            "VIP-ACCESS-999"
+        ];
+
+        document.getElementById('authBtn').addEventListener('click', function() {
+            const key = document.getElementById('keyInput').value.trim().toUpperCase();
+            const error = document.getElementById('errorMsg');
+            
+            if(validKeys.includes(key)) {
+                // Успешный вход
+                window.location.href = "profile.html";
+            } else {
+                // Ошибка
+                error.style.display = 'block';
+                document.querySelector('.auth-container').classList.add('shake');
+                
+                setTimeout(() => {
+                    error.style.display = 'none';
+                    document.querySelector('.auth-container').classList.remove('shake');
+                }, 3000);
+            }
+        });
+
+        // Открытие Telegram-бота
+        document.getElementById('getKeyBtn').addEventListener('click', function() {
+            window.open('https://t.me/zipkarr', '_blank');
+        });
+
+        // Анимация при загрузке
+        setTimeout(() => {
+            document.querySelector('.auth-container').style.opacity = "1";
+            document.querySelector('.auth-container').style.transform = "translateY(0)";
+        }, 100);
+
+        // Обработка нажатия Enter
+        document.getElementById('keyInput').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                document.getElementById('authBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>

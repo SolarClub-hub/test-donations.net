@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #1a73e8;
+            --gold-color: #ffd700;
+            --vip-color: #c0a;
+        }
+        
+        .dark-mode {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-color: #f5f5f5;
+            --accent-color: #4dabf5;
+            --gold-color: #ffd700;
+            --vip-color: #e91e63;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Звездный фон */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        .dark-mode .star {
+            background: var(--gold-color);
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: var(--opacity); }
+        }
+        
+        /* Анимированный баннер с подсветкой */
+        .banner {
+            width: calc(100% - 40px);
+            max-width: 800px;
+            height: 150px;
+            background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%);
+            border-radius: 15px;
+            margin: 20px auto;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1;
+            animation: floatBanner 6s ease-in-out infinite;
+        }
+        
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.3) 20%,
+                rgba(255,255,255,0) 40%
+            );
+            transform: rotate(30deg);
+            animation: shine 5s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        @keyframes floatBanner {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            animation: slideIn 0.8s ease-out;
+            position: relative;
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(26, 115, 232, 0.4);
+        }
+        
+        .edit-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: var(--accent-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 3;
+        }
+        
+        .level-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--gold-color);
+            color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            border: 3px solid var(--card-color);
+            animation: pulse 2s infinite;
+            z-index: 2;
+        }
+        
+        .username {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            padding: 0 10px;
+        }
+        
+        .username:hover::after {
+            content: '✏️';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(26, 115, 232, 0.1);
+            color: var(--accent-color);
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--card-color);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideIn 0.8s ease-out forwards;
+        }
+        
+        .stat-card:nth-child(1) { animation-delay: 0.2s; }
+        .stat-card:nth-child(2) { animation-delay: 0.4s; }
+        .stat-card:nth-child(3) { animation-delay: 0.6s; }
+        .stat-card:nth-child(4) { animation-delay: 0.8s; }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .vip-points {
+            color: var(--vip-color);
+        }
+        
+        .bonus-points {
+            color: var(--accent-color);
+        }
+        
+        .days-count {
+            color: var(--gold-color);
+        }
+        
+        .friends-count {
+            color: #4CAF50;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+        
+        .gold-display {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.2) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: slideIn 0.8s ease-out 0.5s both;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gold-coins {
+            position: absolute;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        
+        .gold-info {
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .gold-icon {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+        
+        .gold-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .gold-amount {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .gold-text {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-top: 3px;
+        }
+        
+        .action-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .action-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(26, 115, 232, 0.4);
+        }
+        
+        .action-price {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .recent-activity {
+            background: var(--card-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            animation: slideIn 0.8s ease-out 0.7s both;
+            margin-top: 20px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(26, 115, 232, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--accent-color);
+            font-size: 18px;
+        }
+        
+        .activity-details {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .activity-time {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--card-color);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+        
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: var(--card-color);
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .modal-btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .avatar-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .avatar-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-option:hover {
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .avatar-option.selected {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(26, 115, 232, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Звездный фон -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Анимированный баннер с подсветкой -->
+    <div class="banner">
+        <img src="banner.jpg" alt="Баннер">
+    </div>
+
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon" id="themeIcon"></i>
+    </button>
+
+    <div class="container">
+        <header class="profile-header">
+            <div class="avatar-container">
+                <img src="avatar.jpg" alt="Аватар" class="avatar" id="userAvatar">
+                <div class="edit-avatar" id="editAvatarBtn">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <div class="level-badge">1</div>
+            </div>
+            <h1 class="username" id="username">new user</h1>
+            <span class="status">Зарегистрированный аккаунт (для изменения никнейма кликните по нему)</span>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value vip-points">0</div>
+                <div class="stat-label">очки</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value bonus-points">0</div>
+                <div class="stat-label">Бонусы</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value friends-count">0</div>
+                <div class="stat-label">Друзей</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value days-count">1</div>
+                <div class="stat-label">Дней в приложении</div>
+            </div>
+        </div>
+
+        <!-- 7 акций покупки золота -->
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="990.webp" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">990</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">6,02$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="2000.webp" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">2000</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">10,90$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="4785.webp" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">4785</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">21,07$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="11880.webp" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">11880</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">50,99$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="Product-img.webp" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">88888</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">300,99$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="icon_diamong_crew_gift.png" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">Акция</div>
+                    <div class="gold-text">любая акция</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">от стоимости акции в игре $</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> Купить
+                </button>
+            </div>
+        </div>
+
+        <div class="gold-display">
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            <i class="fas fa-coins gold-coins"></i>
+            
+            <div class="gold-info">
+                <div class="gold-icon">
+                    <img src="icon_grab_token.png" alt="Золото">
+                </div>
+                <div>
+                    <div class="gold-amount">-</div>
+                    <div class="gold-text">ед. золота</div>
+                </div>
+            </div>
+            <div class="action-container">
+                <span class="action-price">-$</span>
+                <button class="action-btn" onclick="window.open('https://t.me/zipkarr', '_blank')">
+                    <i class="fas fa-shopping-cart"></i> -
+                </button>
+            </div>
+        </div>
+
+        <!-- Последние действия -->
+        <section class="recent-activity">
+            <h2 class="section-title">
+                <i class="fas fa-history"></i> Последние действия
+            </h2>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-minus"></i>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-title">-</div>
+                    <div class="activity-time">-</div>
+                </div>
+                <div class="activity-amount">-</div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-minus"></i>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-title">-</div>
+                    <div class="activity-time">-</div>
+                </div>
+                <div class="activity-amount">-</div>
+            </div>
+            
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas fa-minus"></i>
+                </div>
+                <div class="activity-details">
+                    <div class="activity-title">-</div>
+                    <div class="activity-time">-</div>
+                </div>
+                <div class="activity-amount">-</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Модальное окно смены аватарки -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Выберите аватар</h3>
+            <div class="avatar-options">
+                <img src="avatar1.jpg" class="avatar-option" data-avatar="avatar1.jpg">
+                <img src="avatar2.jpg" class="avatar-option" data-avatar="avatar2.jpg">
+                <img src="avatar3.jpg" class="avatar-option" data-avatar="avatar3.jpg">
+                <img src="avatar4.jpg" class="avatar-option" data-avatar="avatar4.jpg">
+                <img src="avatar5.jpg" class="avatar-option" data-avatar="avatar5.jpg">
+                <img src="avatar6.jpg" class="avatar-option" data-avatar="avatar6.jpg">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="cancelAvatarBtn">Отмена</button>
+                <button class="modal-btn modal-btn-primary" id="saveAvatarBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно смены никнейма -->
+    <div class="modal" id="usernameModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Изменить никнейм</h3>
+            <input type="text" class="modal-input" id="usernameInput" maxlength="20">
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-secondary" id="cancelUsernameBtn">Отмена</button>
+                <button class="modal-btn modal-btn-primary" id="saveUsernameBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Создаем звездный фон
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 100;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Случайные параметры для звезд
+                const size = Math.random() * 3;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const opacity = Math.random() * 0.8 + 0.2;
+                const duration = Math.random() * 5 + 3;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--opacity', opacity);
+                star.style.setProperty('--duration', `${duration}s`);
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Переключение темы
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const body = document.body;
+        
+        if (localStorage.getItem('darkMode') === 'true') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                themeIcon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('darkMode', 'false');
+            }
+        });
+
+        // Смена аватарки
+        const avatarModal = document.getElementById('avatarModal');
+        const editAvatarBtn = document.getElementById('editAvatarBtn');
+        const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+        const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+        const userAvatar = document.getElementById('userAvatar');
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        
+        let selectedAvatar = '';
+        
+        editAvatarBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'flex';
+        });
+        
+        cancelAvatarBtn.addEventListener('click', () => {
+            avatarModal.style.display = 'none';
+        });
+        
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedAvatar = option.getAttribute('data-avatar');
+            });
+        });
+        
+        saveAvatarBtn.addEventListener('click', () => {
+            if (selectedAvatar) {
+                userAvatar.src = selectedAvatar;
+                localStorage.setItem('userAvatar', selectedAvatar);
+            }
+            avatarModal.style.display = 'none';
+        });
+
+        // Смена никнейма
+        const usernameModal = document.getElementById('usernameModal');
+        const usernameElement = document.getElementById('username');
+        const usernameInput = document.getElementById('usernameInput');
+        const cancelUsernameBtn = document.getElementById('cancelUsernameBtn');
+        const saveUsernameBtn = document.getElementById('saveUsernameBtn');
+        
+        usernameElement.addEventListener('click', () => {
+            usernameInput.value = usernameElement.textContent;
+            usernameModal.style.display = 'flex';
+        });
+        
+        cancelUsernameBtn.addEventListener('click', () => {
+            usernameModal.style.display = 'none';
+        });
+        
+        saveUsernameBtn.addEventListener('click', () => {
+            const newUsername = usernameInput.value.trim();
+            if (newUsername) {
+                usernameElement.textContent = newUsername;
+                localStorage.setItem('username', newUsername);
+            }
+            usernameModal.style.display = 'none';
+        });
+
+        // Загрузка сохраненных данных
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            
+            // Проверяем localStorage для сохраненных значений
+            if (localStorage.getItem('username')) {
+                usernameElement.textContent = localStorage.getItem('username');
+            }
+            
+            if (localStorage.getItem('userAvatar')) {
+                userAvatar.src = localStorage.getItem('userAvatar');
+            }
+            
+            // Автоматическое добавление дней и бонусов
+            const now = new Date();
+            const moscowOffset = 3 * 60 * 60 * 1000; // UTC+3
+            const moscowTime = new Date(now.getTime() + moscowOffset);
+            
+            let days = 1;
+            let bonuses = 0;
+            
+            if (localStorage.getItem('lastVisitDate')) {
+                const lastVisitDate = new Date(localStorage.getItem('lastVisitDate'));
+                const daysDiff = Math.floor((moscowTime - lastVisitDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff > 0) {
+                    days = parseInt(localStorage.getItem('savedDays')) + daysDiff;
+                    bonuses = parseInt(localStorage.getItem('savedBonuses')) + daysDiff;
+                } else {
+                    days = parseInt(localStorage.getItem('savedDays'));
+                    bonuses = parseInt(localStorage.getItem('savedBonuses'));
+                }
+            }
+            
+            document.querySelector('.days-count').textContent = days;
+            document.querySelector('.bonus-points').textContent = bonuses;
+            
+            localStorage.setItem('lastVisitDate', moscowTime);
+            localStorage.setItem('savedDays', days);
+            localStorage.setItem('savedBonuses', bonuses);
+        });
+    </script>
+</body>
+</html>

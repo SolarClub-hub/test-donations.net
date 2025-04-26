@@ -1,0 +1,82 @@
+<!-- error.html (страница ошибки) -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ошибка</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            background: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .error-container {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        .error-box {
+            background: #fff;
+            border: 2px solid #ff4444;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.15);
+        }
+        .error-title {
+            color: #ff4444;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .error-message {
+            color: #ff4444;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 24px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .back-btn:hover {
+            background: #0d5bba;
+            transform: translateY(-2px);
+        }
+        .back-btn i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-box">
+            <div class="error-title">Ошибка</div>
+            <div class="error-message">Попробуйте позже</div>
+        </div>
+        <button class="back-btn" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i> Назад
+        </button>
+    </div>
+</body>
+</html>

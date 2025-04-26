@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            box-sizing: border-box;
+        }
+        body {
+            background: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+        .container {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+        }
+        h1 {
+            color: #202124;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 28px;
+            animation: slideDown 0.7s ease-out;
+        }
+        .subtitle {
+            color: #5f6368;
+            font-size: 14px;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.3s forwards;
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 24px;
+            margin: 16px 0;
+            background: #ffffff;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            color: #3c4043;
+            font-size: 14px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            outline: none;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.5s forwards;
+        }
+        .btn:hover {
+            border-color: #d2e3fc;
+            background: #f8f9fa;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+        .btn .icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            transition: transform 0.3s ease;
+        }
+        .btn:hover .icon {
+            transform: scale(1.1);
+        }
+        .login-link {
+            display: block;
+            margin-top: 24px;
+            color: #5f6368;
+            font-size: 14px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.7s forwards;
+        }
+        .login-link a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .login-link a:hover {
+            color: #0d5bba;
+            text-decoration: underline;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Добро пожаловать</h1>
+        <p class="subtitle">Вы можете зарегистрироваться через:</p>
+        
+        <!-- Кнопка Highrise с переходом на error.html -->
+        <button class="btn" onclick="window.location.href='error.html'">
+            <img src="highrise.png" alt="Highrise" class="icon">
+            Зарегистрироваться через Highrise
+        </button>
+        
+        <!-- Кнопка с SVG-иконкой ключа -->
+        <button class="btn" onclick="window.location.href='key-auth.html'">
+            <svg class="icon" viewBox="0 0 24 24" fill="#FFC107">
+                <path d="M12 3a4 4 0 0 0-4 4v3H6v11h12V10h-2V7a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2v3h-4V7a2 2 0 0 1 2-2zm-2 9v2h4v-2h-4z"/>
+            </svg>
+            Авторизоваться через ключ
+        </button>
+
+        <!-- Ссылка "Войти" с переходом на error.html -->
+        <p class="login-link">Уже есть аккаунт? <a href="error.html">Войти</a></p>
+    </div>
+</body>
+</html>
